@@ -1,11 +1,1304 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PakePlus</title>
-    </head>
-    <body>
-        PakePlus
-    </body>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老鬼科技鬼谷子商人围号预测系统 - 组合版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #8f9bba;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #0f3460;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            color: #ff9800;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            color: #8f9bba;
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: #16213e;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .panel-title {
+            color: #ff9800;
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #0f3460;
+        }
+
+        /* 数字输入区域 */
+        .number-input-area {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .number-btn {
+            aspect-ratio: 1;
+            background: #1a1a2e;
+            border: none;
+            border-radius: 10px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #8f9bba;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .number-btn:hover {
+            background: #0f3460;
+            color: #ff9800;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        .number-btn.active {
+            background: #ff9800;
+            color: white;
+            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.5);
+        }
+
+        /* 历史记录显示 */
+        .history-display {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            height: 120px;
+            overflow-y: auto;
+        }
+
+        .history-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .history-item {
+            width: 40px;
+            height: 40px;
+            background: #0f3460;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff9800;
+            transition: all 0.3s;
+        }
+
+        .history-item.latest {
+            background: #ff9800;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+        }
+
+        .history-item:hover {
+            transform: scale(1.05);
+            background: #ff8a00;
+            color: white;
+        }
+
+        /* 操作按钮 */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #ff8a00;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: #0f3460;
+            color: #8f9bba;
+        }
+
+        .btn-secondary:hover {
+            background: #1a4480;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #e94560;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c2185b;
+            transform: translateY(-2px);
+        }
+
+        /* 推荐显示 */
+        .recommendations {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .recommendations {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .recommendation-card {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .recommendation-card.high {
+            border-color: #00ff9d;
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.2);
+        }
+
+        .recommendation-card.medium {
+            border-color: #f9d56e;
+            box-shadow: 0 0 15px rgba(249, 213, 110, 0.2);
+        }
+
+        .recommendation-card.low {
+            border-color: #8f9bba;
+        }
+
+        .recommendation-number {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .recommendation-confidence {
+            color: #8f9bba;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .recommendation-reason {
+            font-size: 12px;
+            color: #8f9bba;
+            margin-top: 10px;
+        }
+
+        /* 重点关注组合 */
+        .hot-combination {
+            background: linear-gradient(135deg, #e94560 0%, #c2185b 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        /* 分析报告 */
+        .analysis-result {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .analysis-result pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        /* 状态栏 */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #0f3460;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .status-item {
+            text-align: center;
+        }
+
+        .status-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff9800;
+        }
+
+        .status-label {
+            font-size: 12px;
+            color: #8f9bba;
+        }
+
+        /* 组合列表 */
+        .combination-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .combination-item {
+            background: #0f3460;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            font-family: 'Consolas', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .combination-item:hover {
+            background: #ff9800;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .combination-item.active {
+            background: #e94560;
+            color: white;
+        }
+
+        /* 统计信息 */
+        .stats-info {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .stat-item {
+            background: #0f3460;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00ff9d;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #8f9bba;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* 操作说明 */
+        .instructions {
+            background: #1a1a2e;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #8f9bba;
+        }
+
+        .instructions ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        .instructions li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>鬼谷子商人围号预测系统 - 组合版</h1>
+            <h2>10期组合匹配分析 | 5个组合数字推荐 | 自动记录历史</h2>
+        </div>
+
+        <div class="main-content">
+            <!-- 左侧：数字输入与历史记录 -->
+            <div class="panel">
+                <div class="panel-title">🎯 数字输入区</div>
+                <p style="color: #8f9bba; margin-bottom: 15px; font-size: 14px;">
+                    点击下方数字按钮记录开奖结果，系统分析最近10期数据并推荐5个组合数字
+                </p>
+                
+                <div class="number-input-area">
+                    <button class="number-btn" data-number="1">1</button>
+                    <button class="number-btn" data-number="2">2</button>
+                    <button class="number-btn" data-number="3">3</button>
+                    <button class="number-btn" data-number="4">4</button>
+                    <button class="number-btn" data-number="5">5</button>
+                    <button class="number-btn" data-number="6">6</button>
+                    <button class="number-btn" data-number="7">7</button>
+                    <button class="number-btn" data-number="8">8</button>
+                    <button class="number-btn" data-number="9">9</button>
+                    <button class="number-btn" data-number="0">0</button>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="analyzeCombinations()">
+                        <span>🔍</span> 立即分析
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearHistory()">
+                        <span>🗑️</span> 清空历史
+                    </button>
+                </div>
+                
+                <div style="margin-top: 15px;">
+                    <div class="panel-title">📜 历史记录</div>
+                    <div class="history-display">
+                        <div id="historyItems" class="history-items">
+                            <div style="color: #8f9bba; text-align: center; width: 100%; padding: 20px;">
+                                暂无历史记录，请点击上方数字开始记录
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; color: #8f9bba; font-size: 12px;">
+                        最近记录：<span id="lastRecordTime">--</span> | 共 <span id="historyCount">0</span> 条记录
+                    </div>
+                </div>
+                
+                <div class="stats-info">
+                    <div class="panel-title">📊 统计信息</div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalNumbers">0</div>
+                            <div class="stat-label">总期数</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="avgNumber">--</div>
+                            <div class="stat-label">平均数字</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="hotNumber">--</div>
+                            <div class="stat-label">热门数字</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="instructions">
+                    <div class="panel-title">📋 使用说明</div>
+                    <ul>
+                        <li>点击上方数字按钮记录开奖结果</li>
+                        <li>系统自动保存历史记录到浏览器</li>
+                        <li>记录满10期后自动分析并推荐围号</li>
+                        <li>推荐的5个数字全部来自固定组合</li>
+                        <li>点击"立即分析"按钮可手动触发分析</li>
+                        <li>点击"清空历史"按钮可重置所有数据</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 右侧：分析结果 -->
+            <div class="panel">
+                <div class="panel-title">🎯 围号推荐结果</div>
+                
+                <!-- 重点关注组合 -->
+                <div id="hotCombination" class="hot-combination" style="display: none;">
+                    <div style="font-size: 16px; font-weight: bold; margin-bottom: 10px;">
+                        🔥 重点关注组合
+                    </div>
+                    <div id="hotComboInfo">等待分析...</div>
+                </div>
+
+                <!-- 推荐数字 -->
+                <div class="recommendations" id="recommendationsContainer">
+                    <div class="recommendation-card">
+                        <div class="recommendation-number">--</div>
+                        <div class="recommendation-confidence">等待分析</div>
+                        <div class="recommendation-reason">请先记录10期以上开奖数字</div>
+                    </div>
+                </div>
+
+                <!-- 详细分析报告 -->
+                <div class="analysis-result">
+                    <div class="panel-title">📈 详细分析报告</div>
+                    <pre id="analysisReport">系统等待输入数据...
+
+使用说明：
+1. 点击左侧数字按钮记录开奖结果
+2. 系统自动分析最近10期数据
+3. 推荐的5个数字全部来自固定组合
+4. 历史数据自动保存到浏览器
+</pre>
+                </div>
+                
+                <!-- 组合数据库 -->
+                <div style="margin-top: 20px;">
+                    <div class="panel-title">📋 固定组合数据库</div>
+                    <div class="combination-list">
+                        <div class="combination-item">9527</div>
+                        <div class="combination-item">9413</div>
+                        <div class="combination-item">0918</div>
+                        <div class="combination-item">5173</div>
+                        <div class="combination-item">1479</div>
+                        <div class="combination-item">16842</div>
+                        <div class="combination-item">0318</div>
+                        <div class="combination-item">741</div>
+                        <div class="combination-item">958</div>
+                        <div class="combination-item">369</div>
+                        <div class="combination-item">408</div>
+                        <div class="combination-item">749</div>
+                        <div class="combination-item">731</div>
+                        <div class="combination-item">389</div>
+                        <div class="combination-item">985</div>
+                        <div class="combination-item">710</div>
+                        <div class="combination-item">326</div>
+                        <div class="combination-item">951</div>
+                        <div class="combination-item">96</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-value" id="historyLength">0</div>
+                <div class="status-label">历史期数</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="combinationsCount">19</div>
+                <div class="status-label">组合数量</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="topCombo">--</div>
+                <div class="status-label">重点关注组合</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="missingDigits">0</div>
+                <div class="status-label">组合缺失数字</div>
+            </div>
+            <div class="status-item">
+                <div class="status-value" id="lastUpdate">--:--</div>
+                <div class="status-label">最后更新</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 固定组合数据库
+        const combinations = [
+            "9527", "9413", "0918", "5173", "1479", "16842", "0318",
+            "741", "958", "369", "408", "749", "731", "389", "985", "710", "326", "951", "96"
+        ];
+
+        // 组合信息映射
+        const comboInfo = {};
+        
+        // 历史记录
+        let history = [];
+
+        // 初始化组合信息
+        function initializeComboInfo() {
+            combinations.forEach(combo => {
+                const digits = combo.split('').map(Number);
+                comboInfo[combo] = {
+                    digits: digits,
+                    length: combo.length,
+                    string: combo
+                };
+            });
+        }
+
+        // 初始化事件监听
+        function initializeEventListeners() {
+            // 数字按钮点击事件
+            document.querySelectorAll('.number-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const number = parseInt(this.dataset.number);
+                    addHistoryNumber(number);
+                });
+            });
+            
+            // 键盘事件监听
+            document.addEventListener('keydown', function(e) {
+                // 数字键0-9
+                if (e.key >= '0' && e.key <= '9') {
+                    e.preventDefault();
+                    addHistoryNumber(parseInt(e.key));
+                }
+                
+                // 空格键：立即分析
+                if (e.key === ' ') {
+                    e.preventDefault();
+                    analyzeCombinations();
+                }
+                
+                // 回车键：立即分析
+                if (e.key === 'Enter') {
+                    analyzeCombinations();
+                }
+                
+                // ESC键：清空历史
+                if (e.key === 'Escape') {
+                    clearHistory();
+                }
+            });
+        }
+
+        // 添加历史数字
+        function addHistoryNumber(number) {
+            const timestamp = new Date();
+            history.push({
+                number: number,
+                timestamp: timestamp,
+                dateStr: timestamp.toLocaleString('zh-CN')
+            });
+            
+            // 限制历史记录数量
+            if (history.length > 100) {
+                history.shift();
+            }
+            
+            // 保存到本地存储
+            saveHistory();
+            
+            // 更新显示
+            updateHistoryDisplay();
+            updateNumberButtons();
+            updateStats();
+            
+            // 自动分析（如果有足够数据）
+            if (history.length >= 10) {
+                setTimeout(() => {
+                    analyzeCombinations();
+                }, 300);
+            } else {
+                // 更新分析报告提示
+                document.getElementById('analysisReport').textContent = 
+                    `已记录 ${history.length} 期数据，还需要 ${10 - history.length} 期数据才能进行分析\n\n` +
+                    `最近记录：${number} (${timestamp.toLocaleTimeString('zh-CN')})`;
+            }
+        }
+
+        // 更新数字按钮显示
+        function updateNumberButtons() {
+            document.querySelectorAll('.number-btn').forEach(btn => {
+                const number = parseInt(btn.dataset.number);
+                
+                btn.innerHTML = `${number}`;
+                
+                // 如果是最近一次记录的数字，高亮显示
+                if (history.length > 0 && history[history.length - 1].number === number) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        // 更新历史记录显示
+        function updateHistoryDisplay() {
+            const container = document.getElementById('historyItems');
+            
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <div style="color: #8f9bba; text-align: center; width: 100%; padding: 20px;">
+                        暂无历史记录，请点击上方数字开始记录
+                    </div>
+                `;
+                return;
+            }
+            
+            // 显示最近30条记录
+            const recentHistory = history.slice(-30);
+            container.innerHTML = '';
+            
+            recentHistory.forEach((item, index) => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item fade-in';
+                
+                // 如果是最近一条记录，添加特殊样式
+                if (index === recentHistory.length - 1) {
+                    historyItem.classList.add('latest');
+                }
+                
+                historyItem.innerHTML = `
+                    <span>${item.number}</span>
+                `;
+                
+                container.appendChild(historyItem);
+            });
+            
+            // 更新统计信息
+            document.getElementById('historyCount').textContent = history.length;
+            document.getElementById('lastRecordTime').textContent = 
+                history[history.length - 1].dateStr;
+            document.getElementById('historyLength').textContent = history.length;
+            document.getElementById('lastUpdate').textContent = 
+                new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // 更新统计信息
+        function updateStats() {
+            if (history.length === 0) {
+                document.getElementById('totalNumbers').textContent = '0';
+                document.getElementById('avgNumber').textContent = '--';
+                document.getElementById('hotNumber').textContent = '--';
+                return;
+            }
+            
+            // 总期数
+            document.getElementById('totalNumbers').textContent = history.length;
+            
+            // 平均数字
+            const sum = history.reduce((acc, item) => acc + item.number, 0);
+            const avg = (sum / history.length).toFixed(1);
+            document.getElementById('avgNumber').textContent = avg;
+            
+            // 热门数字
+            const counts = {};
+            history.forEach(item => {
+                counts[item.number] = (counts[item.number] || 0) + 1;
+            });
+            
+            let maxCount = 0;
+            let hotNumber = null;
+            for (const [num, count] of Object.entries(counts)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    hotNumber = num;
+                }
+            }
+            
+            document.getElementById('hotNumber').textContent = hotNumber || '--';
+        }
+
+        // 获取最近10期数字
+        function getRecent10Numbers() {
+            if (history.length < 10) {
+                return history.map(item => item.number).reverse();
+            }
+            return history.slice(-10).map(item => item.number).reverse();
+        }
+
+        // 获取上期数字
+        function getLastDigit() {
+            if (history.length === 0) {
+                return null;
+            }
+            return history[history.length - 1].number;
+        }
+
+        // 分析组合匹配情况
+        function analyzeComboPatterns(recentNumbers) {
+            const analysis = [];
+            
+            combinations.forEach(combo => {
+                const info = comboInfo[combo];
+                const comboDigits = info.digits;
+                
+                // 统计匹配情况
+                let matchedDigits = [];
+                let totalMatches = 0;
+                
+                comboDigits.forEach(digit => {
+                    const count = recentNumbers.filter(n => n === digit).length;
+                    if (count > 0) {
+                        matchedDigits.push({
+                            digit: digit,
+                            count: count
+                        });
+                        totalMatches += count;
+                    }
+                });
+                
+                // 计算匹配率
+                const recentSet = new Set(recentNumbers);
+                const uniqueMatches = comboDigits.filter(d => recentSet.has(d)).length;
+                const matchRate = uniqueMatches / comboDigits.length;
+                
+                // 找出缺失数字
+                const missingDigits = comboDigits.filter(d => !recentSet.has(d));
+                
+                analysis.push({
+                    combo: combo,
+                    fullCombo: info.string,
+                    comboDigits: comboDigits,
+                    matchedDigits: matchedDigits,
+                    totalMatches: totalMatches,
+                    uniqueMatches: uniqueMatches,
+                    matchRate: matchRate,
+                    missingDigits: missingDigits,
+                    comboLength: comboDigits.length
+                });
+            });
+            
+            // 按匹配数量排序
+            analysis.sort((a, b) => {
+                if (b.uniqueMatches !== a.uniqueMatches) {
+                    return b.uniqueMatches - a.uniqueMatches;
+                }
+                return b.totalMatches - a.totalMatches;
+            });
+            
+            return analysis;
+        }
+
+        // 获取推荐数字 - 只从组合中推荐缺失的数字
+        function getRecommendations(analysis, lastDigit, numRecommendations = 5) {
+            const recommendations = [];
+            const recommendedDigits = new Set();
+            
+            // 策略1：优先推荐最佳组合中缺失的数字
+            if (analysis && analysis.length > 0) {
+                for (let i = 0; i < analysis.length; i++) {
+                    const comboInfo = analysis[i];
+                    if (comboInfo.uniqueMatches > 0) {
+                        comboInfo.missingDigits.forEach(digit => {
+                            if (recommendations.length < numRecommendations && !recommendedDigits.has(digit)) {
+                                const confidence = Math.min(0.9, 0.4 + (comboInfo.matchRate * 0.5));
+                                
+                                recommendations.push({
+                                    number: digit,
+                                    confidence: confidence,
+                                    fullCombo: comboInfo.fullCombo,
+                                    comboDigits: comboInfo.comboDigits,
+                                    matchRate: comboInfo.matchRate,
+                                    missingInCombo: true,
+                                    reason: `组合[${comboInfo.fullCombo}]匹配${comboInfo.uniqueMatches}个数字，缺${digit}`
+                                });
+                                
+                                recommendedDigits.add(digit);
+                            }
+                        });
+                    }
+                }
+            }
+            
+            // 策略2：如果还不够5个，从所有组合数字中推荐（但必须是组合中的数字）
+            if (recommendations.length < numRecommendations) {
+                // 收集所有组合中的数字
+                const allComboDigits = new Set();
+                combinations.forEach(combo => {
+                    const digits = combo.split('').map(Number);
+                    digits.forEach(digit => allComboDigits.add(digit));
+                });
+                
+                // 找出在组合中但最近10期没出现的数字
+                const recentSet = new Set(getRecent10Numbers());
+                const missingComboDigits = Array.from(allComboDigits).filter(d => !recentSet.has(d));
+                
+                // 从这些数字中推荐（排除已推荐的）
+                for (let digit of missingComboDigits) {
+                    if (recommendations.length >= numRecommendations) break;
+                    
+                    if (!recommendedDigits.has(digit) && digit !== lastDigit) {
+                        // 找到包含这个数字的组合
+                        let foundCombo = '';
+                        let foundComboDigits = [];
+                        
+                        for (const combo of combinations) {
+                            const digits = combo.split('').map(Number);
+                            if (digits.includes(digit)) {
+                                foundCombo = combo;
+                                foundComboDigits = digits;
+                                break;
+                            }
+                        }
+                        
+                        recommendations.push({
+                            number: digit,
+                            confidence: 0.35,
+                            fullCombo: foundCombo,
+                            comboDigits: foundComboDigits,
+                            missingInCombo: true,
+                            reason: `组合[${foundCombo}]中的数字，近期未出现`
+                        });
+                        
+                        recommendedDigits.add(digit);
+                    }
+                }
+            }
+            
+            // 如果还不够5个，使用补充策略：从组合中随机选择（确保都是组合数字）
+            if (recommendations.length < numRecommendations) {
+                // 收集所有组合数字
+                const allComboDigits = new Set();
+                combinations.forEach(combo => {
+                    const digits = combo.split('').map(Number);
+                    digits.forEach(digit => allComboDigits.add(digit));
+                });
+                
+                // 将组合数字转为数组并随机排序
+                const allDigitsArray = Array.from(allComboDigits).sort(() => Math.random() - 0.5);
+                
+                for (let digit of allDigitsArray) {
+                    if (recommendations.length >= numRecommendations) break;
+                    
+                    if (!recommendedDigits.has(digit) && digit !== lastDigit) {
+                        // 找到包含这个数字的组合
+                        let foundCombo = '';
+                        let foundComboDigits = [];
+                        
+                        for (const combo of combinations) {
+                            const digits = combo.split('').map(Number);
+                            if (digits.includes(digit)) {
+                                foundCombo = combo;
+                                foundComboDigits = digits;
+                                break;
+                            }
+                        }
+                        
+                        recommendations.push({
+                            number: digit,
+                            confidence: 0.3,
+                            fullCombo: foundCombo,
+                            comboDigits: foundComboDigits,
+                            missingInCombo: false,
+                            reason: `组合[${foundCombo}]中的数字`
+                        });
+                        
+                        recommendedDigits.add(digit);
+                    }
+                }
+            }
+            
+            return recommendations.slice(0, numRecommendations);
+        }
+
+        // 生成分析报告
+        function generateAnalysisReport(recentNumbers, lastDigit, analysis, recommendations) {
+            let report = "组合分析与围号推荐报告\n";
+            report += "=".repeat(70) + "\n\n";
+            
+            report += `上期数字：${lastDigit !== null ? lastDigit : '未记录'}\n`;
+            report += `前10期数字：${recentNumbers.join(' ')}\n\n`;
+            
+            report += "🔥 前10期组合分析：\n";
+            report += "-".repeat(60) + "\n";
+            
+            if (analysis && analysis.length > 0 && analysis[0].uniqueMatches > 0) {
+                const topCombo = analysis[0];
+                report += `重点关注组合：${topCombo.fullCombo}\n`;
+                report += `匹配数字：${topCombo.uniqueMatches}个（${Math.round(topCombo.matchRate * 100)}%）\n`;
+                
+                if (topCombo.matchedDigits.length > 0) {
+                    report += "匹配数字：";
+                    topCombo.matchedDigits.forEach(md => {
+                        report += `${md.digit}(${md.count}次) `;
+                    });
+                    report += "\n";
+                }
+                
+                if (topCombo.missingDigits.length > 0) {
+                    report += `缺失数字：${topCombo.missingDigits.join(', ')}\n`;
+                }
+                
+                report += `完整组合：${topCombo.comboDigits.join('')}\n`;
+            } else {
+                report += "前10期数字未在组合中明显匹配\n";
+            }
+            
+            report += "\n📊 相关组合分析：\n";
+            report += "-".repeat(60) + "\n";
+            
+            // 显示前5个相关组合
+            for (let i = 0; i < Math.min(5, analysis.length); i++) {
+                const combo = analysis[i];
+                if (combo.uniqueMatches > 0) {
+                    report += `${combo.fullCombo}: 匹配${combo.uniqueMatches}个数字 (${Math.round(combo.matchRate * 100)}%)\n`;
+                }
+            }
+            
+            report += "\n🎯 围号推荐（5个组合数字）：\n";
+            report += "-".repeat(60) + "\n";
+            
+            if (recommendations.length > 0) {
+                recommendations.forEach((rec, index) => {
+                    const rating = rec.confidence >= 0.7 ? "⭐⭐⭐" : 
+                                  rec.confidence >= 0.5 ? "⭐⭐" : "⭐";
+                    
+                    report += `${index + 1}. 推荐围号：${rec.number}号 ${rating}\n`;
+                    report += `   推荐度：${Math.round(rec.confidence * 100)}%\n`;
+                    report += `   理由：${rec.reason}\n`;
+                    
+                    if (rec.fullCombo && rec.fullCombo !== '') {
+                        report += `   组合：${rec.fullCombo} → `;
+                        rec.comboDigits.forEach(d => {
+                            if (d === lastDigit) {
+                                report += `[${d}] `;
+                            } else if (d === rec.number) {
+                                report += `<${d}> `;
+                            } else {
+                                report += `${d} `;
+                            }
+                        });
+                        report += "\n";
+                    }
+                    
+                    report += "\n";
+                });
+                
+                // 特别推荐前3个
+                if (recommendations.length >= 3) {
+                    report += "💡 特别推荐：\n";
+                    const top3 = recommendations.slice(0, 3);
+                    const top3Nums = top3.map(rec => `${rec.number}号`);
+                    report += `   重点围号：${top3Nums.join(', ')}\n`;
+                }
+                
+                // 检查所有推荐数字是否都在组合中
+                const allInCombos = recommendations.every(rec => rec.fullCombo && rec.fullCombo !== '');
+                if (allInCombos) {
+                    report += "✅ 所有推荐数字均来自固定组合\n";
+                }
+            } else {
+                report += "暂无围号推荐\n";
+            }
+            
+            report += "\n📈 历史统计：\n";
+            report += "-".repeat(60) + "\n";
+            report += `总期数：${history.length}期\n`;
+            if (history.length > 0) {
+                const last5 = history.slice(-5).map(h => h.number);
+                report += `最近5期：${last5.join(' ')}\n`;
+            }
+            
+            return report;
+        }
+
+        // 更新推荐显示
+        function updateRecommendationsDisplay(recommendations, lastDigit) {
+            const container = document.getElementById('recommendationsContainer');
+            container.innerHTML = '';
+            
+            if (recommendations.length === 0) {
+                container.innerHTML = `
+                    <div class="recommendation-card">
+                        <div class="recommendation-number">--</div>
+                        <div class="recommendation-confidence">无推荐</div>
+                        <div class="recommendation-reason">请先记录10期以上开奖数字</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            recommendations.forEach(rec => {
+                let confidenceClass = 'low';
+                if (rec.confidence >= 0.7) confidenceClass = 'high';
+                else if (rec.confidence >= 0.5) confidenceClass = 'medium';
+                
+                const card = document.createElement('div');
+                card.className = `recommendation-card ${confidenceClass} fade-in`;
+                
+                let comboText = '';
+                if (rec.fullCombo && rec.fullCombo !== '') {
+                    comboText = `<div style="font-size: 11px; margin-top: 5px; color: #ff9800;">组合: ${rec.fullCombo}</div>`;
+                }
+                
+                card.innerHTML = `
+                    <div class="recommendation-number">${rec.number}</div>
+                    <div class="recommendation-confidence">${Math.round(rec.confidence * 100)}% 推荐度</div>
+                    ${rec.missingInCombo ? '<div style="color: #ff9800; font-size: 12px;">🔍 组合缺失数字</div>' : ''}
+                    ${comboText}
+                    <div class="recommendation-reason">${rec.reason}</div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // 更新重点关注组合显示
+        function updateHotComboDisplay(analysis) {
+            const hotComboDiv = document.getElementById('hotCombination');
+            const hotComboInfo = document.getElementById('hotComboInfo');
+            const topComboSpan = document.getElementById('topCombo');
+            
+            if (analysis && analysis.length > 0 && analysis[0].uniqueMatches > 0) {
+                const topCombo = analysis[0];
+                hotComboDiv.style.display = 'block';
+                
+                let matchedText = '';
+                if (topCombo.matchedDigits.length > 0) {
+                    matchedText = '匹配数字: ';
+                    topCombo.matchedDigits.forEach((md, index) => {
+                        if (index > 0) matchedText += ', ';
+                        matchedText += `${md.digit}(${md.count}次)`;
+                    });
+                }
+                
+                let missingText = '';
+                if (topCombo.missingDigits.length > 0) {
+                    missingText = `缺失数字: <span class="missing-digit">${topCombo.missingDigits.join(', ')}</span>`;
+                }
+                
+                hotComboInfo.innerHTML = `
+                    <div style="margin-bottom: 5px;">
+                        <strong>${topCombo.fullCombo}</strong> (匹配${topCombo.uniqueMatches}个数字)
+                    </div>
+                    <div style="font-size: 14px; margin-bottom: 5px;">${matchedText}</div>
+                    <div style="font-size: 14px;">${missingText}</div>
+                `;
+                
+                topComboSpan.textContent = topCombo.fullCombo;
+                document.getElementById('missingDigits').textContent = topCombo.missingDigits.length;
+            } else {
+                hotComboDiv.style.display = 'none';
+                topComboSpan.textContent = '--';
+                document.getElementById('missingDigits').textContent = '0';
+            }
+        }
+
+        // 主分析函数
+        function analyzeCombinations() {
+            const recentNumbers = getRecent10Numbers();
+            const lastDigit = getLastDigit();
+            
+            if (recentNumbers.length < 10) {
+                alert(`请先记录至少10期开奖数字！\n当前已记录：${history.length}期`);
+                return;
+            }
+            
+            if (lastDigit === null) {
+                alert('请先记录开奖数字！');
+                return;
+            }
+            
+            // 分析组合模式
+            const analysis = analyzeComboPatterns(recentNumbers);
+            
+            // 获取推荐 - 只从组合中推荐
+            const recommendations = getRecommendations(analysis, lastDigit, 5);
+            
+            // 生成报告
+            const report = generateAnalysisReport(recentNumbers, lastDigit, analysis, recommendations);
+            
+            // 更新显示
+            document.getElementById('analysisReport').textContent = report;
+            updateRecommendationsDisplay(recommendations, lastDigit);
+            updateHotComboDisplay(analysis);
+            
+            // 显示成功消息
+            showNotification(`分析完成！推荐了5个组合数字`, 'success');
+        }
+
+        // 显示通知
+        function showNotification(message, type = 'info') {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.className = `notification fade-in`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#00ff9d' : type === 'error' ? '#e94560' : '#0f3460'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 5px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                z-index: 1000;
+                font-weight: bold;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // 3秒后移除
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // 清空历史
+        function clearHistory() {
+            if (history.length === 0) {
+                showNotification('历史记录已为空！', 'info');
+                return;
+            }
+            
+            if (confirm(`确定要清空所有历史记录吗？\n共${history.length}条记录将丢失。`)) {
+                history = [];
+                saveHistory();
+                updateHistoryDisplay();
+                updateNumberButtons();
+                updateStats();
+                
+                // 清空分析结果
+                document.getElementById('analysisReport').textContent = 
+                    '历史记录已清空！\n\n请点击左侧数字按钮开始记录开奖结果。';
+                document.getElementById('recommendationsContainer').innerHTML = `
+                    <div class="recommendation-card">
+                        <div class="recommendation-number">--</div>
+                        <div class="recommendation-confidence">等待分析</div>
+                        <div class="recommendation-reason">请先记录10期以上开奖数字</div>
+                    </div>
+                `;
+                document.getElementById('hotCombination').style.display = 'none';
+                
+                showNotification('历史记录已清空！', 'success');
+            }
+        }
+
+        // 保存历史到本地存储
+        function saveHistory() {
+            try {
+                const historyData = {
+                    numbers: history.map(h => h.number),
+                    timestamps: history.map(h => h.timestamp.getTime()),
+                    version: '1.0'
+                };
+                localStorage.setItem('combinationHistory', JSON.stringify(historyData));
+            } catch (e) {
+                console.error('保存历史失败:', e);
+            }
+        }
+
+        // 从本地存储加载历史
+        function loadHistory() {
+            try {
+                const saved = localStorage.getItem('combinationHistory');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    history = [];
+                    
+                    if (data.numbers && data.timestamps) {
+                        for (let i = 0; i < data.numbers.length; i++) {
+                            history.push({
+                                number: data.numbers[i],
+                                timestamp: new Date(data.timestamps[i]),
+                                dateStr: new Date(data.timestamps[i]).toLocaleString('zh-CN')
+                            });
+                        }
+                    }
+                    
+                    if (history.length > 0) {
+                        updateHistoryDisplay();
+                        updateNumberButtons();
+                        updateStats();
+                        
+                        // 如果有足够数据，自动分析
+                        if (history.length >= 10) {
+                            setTimeout(() => {
+                                analyzeCombinations();
+                            }, 500);
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('加载历史失败:', e);
+            }
+        }
+
+        // 初始化
+        function initialize() {
+            initializeComboInfo();
+            initializeEventListeners();
+            loadHistory();
+            
+            // 显示欢迎信息
+            setTimeout(() => {
+                if (history.length === 0) {
+                    showNotification('欢迎使用鬼谷子商人围号预测系统！点击数字按钮开始记录。', 'info');
+                } else if (history.length < 10) {
+                    showNotification(`已加载 ${history.length} 条历史记录，还需要 ${10 - history.length} 条才能分析`, 'info');
+                } else {
+                    showNotification(`已加载 ${history.length} 条历史记录，系统已自动分析`, 'success');
+                }
+            }, 1000);
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initialize);
+    </script>
+</body>
 </html>
